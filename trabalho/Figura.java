@@ -8,14 +8,19 @@ public class Figura {
     private float base_a;
     private float base_b;
     private float area;
+    private int id;
 
-    public Figura(){}
+    public Figura(){
+        this.x0 = this.x1 = this.x2 = this.x3 = this.base_a = this.base_b = this.area = (float)0.0;
+        this.id = -1;
+    }
 
-    public Figura (float x0, float x1, float x2, float x3){
+    public Figura (float x0, float x1, float x2, float x3, int id){
         this.x0 = x0;
         this.x1 = x1;
         this.x2 = x2;
         this.x3 = x3;
+        this.id = id;
         calcArea();
     }
 
@@ -79,8 +84,25 @@ public class Figura {
         clone.setX1( this.x1 );
         clone.setX2( this.x2 );
         clone.setX3( this.x3 );
+        clone.setId( this.id );
 
         return clone;
     }//end getClone
+
+    public void newFigura (Figura f){
+        this.x0 = f.getX0();
+        this.x1 = f.getX1();
+        this.x2 = f.getX2();
+        this.x3 = f.getX3();
+        this.id = f.getId();
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public int getId(){
+        return this.id;
+    }
     
 }//end class
