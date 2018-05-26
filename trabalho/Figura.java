@@ -71,5 +71,16 @@ public class Figura {
     public float getArea(){
         return area;
     }
+
+
+    public Figura getClone(){
+        Figura clone = new Figura();        
+        clone.setX0( this.x0 );
+        clone.setX1( this.x1 );
+        clone.setX2( this.x2 );
+        clone.setX3( this.x3 );
+
+        return clone;
+    }//end getClone
     
 }//end class
