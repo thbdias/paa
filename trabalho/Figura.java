@@ -21,7 +21,7 @@ public class Figura {
         this.x2 = x2;
         this.x3 = x3;
         this.id = id;
-        calcArea();
+        //calcAreaFigura();
     }
 
     public void setX0(float x0){
@@ -60,7 +60,7 @@ public class Figura {
         return this.altura;
     } 
 
-    private void calcArea(){
+    public void calcAreaFigura(){
         base_a = x1;
 
         if (x3 < 0)
@@ -71,10 +71,10 @@ public class Figura {
             base_b = x2;
         
         area = ((base_a + base_b)/2) * altura;
-    }//enc calcArea
+    }//enc calcAreaFigura
 
     public float getArea(){
-        return area;
+        return this.area;
     }
 
 

@@ -14,6 +14,8 @@ public class Principal{
     //armazena a permutacao corrente
 	private static Figura [] p;
     private static ArrayList<Figura[]> permutacoes = new ArrayList<Figura[]>();
+    //private static ArrayList<Float> areasTotais = new ArrayList<Float>();    
+    private static float areaTotalFiguras = (float)0.0;
 
 
     /**
@@ -138,7 +140,33 @@ public class Principal{
 
             System.out.println();
         }
-	} //--imprime
+	} //--imprimePermutacoes
+
+
+    private static void calcAreaTotalFiguras(){
+        float aux = (float)0.0;
+
+        //for (Figura[] f : permutacoes){                        
+            
+            //aux = (float)0.0;
+            //pegando qualquer permutação para calcular areas das figuras
+            Figura[] f = permutacoes.get(0); 
+
+            for (int i=0; i < f.length; i++) {
+                f[i].calcAreaFigura();
+                aux += f[i].getArea();                
+            }
+            
+            //System.out.println("\narea = " + aux);
+            System.out.println("\narea total das figuras= " + aux);
+
+            //if (aux > melhorArea)
+            //    melhorArea = aux;
+
+            //areasTotais.add((float)aux);
+        //}//end for
+        //System.out.println("\n\nMelhor área = " + melhorArea);
+    }//--calcAreas
 
 
 
@@ -182,13 +210,17 @@ public class Principal{
                 Float.valueOf(coordenadas[2]).floatValue(),
                 id
             );   
-            id++;                                                       
+            id++;
+
+            //System.out.println("==> " + figuras[i].getArea());
+
         }//end for
         
         //imprimeFiguras();
 
         //testeJuntarFigura();
         testePermuta();
+        calcAreaTotalFiguras();
 
         System.out.println();
     }//end main
