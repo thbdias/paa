@@ -267,7 +267,7 @@ public class Principal{
     */
     private static void calcDesperdicio(){
         float aux;
-        menorDesperdicio = 0.0;
+        menorDesperdicio = (float)0.0;
 
         //percorrer a area total do pano de cada permutacao
         for (Float a : areaTotalPano){
@@ -281,7 +281,28 @@ public class Principal{
     }//--calcDesperdicio
 
 
-    private static void melhorCombinacao(){}//--melhorCombinacao
+    /**
+        metodo que calcula a melhor combinação
+    */
+    private static void calcMelhorCombinacao(){
+        int pos = 0;
+
+        //percorrer o valor de desperdicio de cada permutação
+        for (int i = 0; i < areaTotalDesperdicio.size()-1; i++){
+            pos = 0;
+            if (areaTotalDesperdicio.get(i) == menorDesperdicio){
+                pos = i; //posicao com menor desperdicio
+                i = areaTotalDesperdicio.size(); //sair do loop
+            }
+        }//end for
+
+        //exibir
+        Figura []fig = permutacoes.get(pos);
+        System.out.println("\n\n\n\nMELHOR COMBINAÇÃO:\n");
+        for (Figura f : fig)
+            System.out.print(f.getId() + " ");
+        System.out.println("\n\n");
+    }//--calcMelhorCombinacao
 
 
 
@@ -294,6 +315,7 @@ public class Principal{
         //testeJuntarFigura();
         calcAreaPano();
         calcDesperdicio();
+        calcMelhorCombinacao();
     }//end controle
 
 
