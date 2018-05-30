@@ -63,12 +63,12 @@ public class Figura {
     public void calcAreaFigura(){
         base_a = x1;
 
-        if (x3 < 0)
-            base_b = x2 + (x3 * (-1));
-        else if (x3 > 0)
-            base_b = x2 - x3;
-        else
-            base_b = x2;
+        if ((x3 < 0) && (x2 < 0))
+            base_b = (x3 * (-1)) - (x2 * (-1));
+        else if ((x3 < 0) && (x2 >= 0))
+            base_b = (x3 * (-1)) + x2;
+        else if((x3 >= 0) && (x2 >= 0))        
+            base_b = x2 - x3;        
         
         area = ((base_a + base_b)/2) * altura;
     }//enc calcAreaFigura

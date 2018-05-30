@@ -12,10 +12,14 @@ public class Principal{
     //numero da permutacao atual
 	private static int cont=0; 
     //armazena a permutacao corrente
-	private static Figura [] p;
+	private static Figura [] p;    
     private static ArrayList<Figura[]> permutacoes = new ArrayList<Figura[]>();
-    //private static ArrayList<Float> areasTotais = new ArrayList<Float>();    
+    //cada posicao do array 'figura_finial' representa uma posição do array 'permutacoes'
+    //coordenada final de cada permutação
+    private static ArrayList<Figura> coordenada_final = new ArrayList<Figura>();    
     private static float areaTotalFiguras = (float)0.0;
+    private static ArrayList<Float> areaTotalPano = new ArrayList<Float>();    
+    private static ArrayList<Float> areaTotalDesperdicio = new ArrayList<Float>();    
 
 
     /**
@@ -23,21 +27,23 @@ public class Principal{
     */
     public static Figura juntar(Figura a, Figura b){
         Figura resultante = new Figura();
-
+        //System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         //verifica se pode juntar pela parte de cima
         if ((a.getX1() + b.getX3()) >= a.getX2()){   //tenta juntar pela parte de cima
             resultante.setX0( a.getX1() );
             resultante.setX1( a.getX1() + b.getX1() );
             resultante.setX2( resultante.getX0() + b.getX2() );
             resultante.setX3( resultante.getX0() + b.getX3() );
+            //System.out.print("cima = ");
         }
         else{ //juntar pela parte de baixo
             resultante.setX3( a.getX2() );
             resultante.setX0( resultante.getX3() - b.getX3() );
             resultante.setX1( resultante.getX0() + b.getX1() );
             resultante.setX2( resultante.getX0() + b.getX2() );
+            //System.out.print("baixo = ");
         }
-        
+        //System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         return resultante.getClone();
     }
 
@@ -58,7 +64,10 @@ public class Principal{
     }
 
 
-     public static void testePermuta() {
+    /**
+        metodo que inicia a permutacao
+    */
+    public static void fazerPermuta() {
 		
 		p = new Figura[figuras.length];
 
@@ -66,21 +75,19 @@ public class Principal{
             p[i] = new Figura(); 
         }
 
-		permuta(figuras, 0);
-        imprimePermutacoes();
-	}
+		permuta(figuras, 0);        
+	}//--fazerPermuta
 
 
     /**
-	 * método recursivo que implementa as permutacoes
-	 * @param vet
-	 * @param nivel
+	 * método recursivo que implementa as permutacoes	 	 
 	 */
 	private static void permuta(Figura []figuras, int nivel) {		
 		if (nivel == figuras.length) {
 			cont++;
 			//imprime();
-            addPermutacao();
+            addNovaPermutacao();
+            juntarFigurasNovaPermutacao();            
             //imprimePermutacoes();
 		} 
         else {					
@@ -115,7 +122,8 @@ public class Principal{
 	} //--imprime
 
 
-    private static void addPermutacao(){
+    /** adiciona uma nova permutação no arraylist de permutações */
+    private static void addNovaPermutacao(){
         Figura [] newPerm = new Figura[figuras.length];
 
         for (int i = 0; i < newPerm.length; i++){
@@ -123,10 +131,43 @@ public class Principal{
         }
 
         permutacoes.add(newPerm);
-    }
-  
+    }//--addNovaPermutacao
 
     
+
+
+    /** 
+        metodo que junta as figuras de acordo com a nova permutação
+        para cada junção uma figura geral é formada com
+        o x0 e x3 inicial
+        e x1 e x2 final, 
+        ou seja os dois primeiros pontos no inicio do pano
+        e os dois pontos que estão no final do pano.
+        Esse método obtem as coordenadas finais de uma permutação.
+    */
+    private static void juntarFigurasNovaPermutacao(){
+        Figura novaFigura = new Figura();
+        Figura [] perm = permutacoes.get( permutacoes.size()-1 ); //ultima permutacao        
+        Figura resultante = new Figura(); //dados do último trapezoide
+
+        novaFigura.setX0(perm[0].getX0());  //dados da primeira figura
+        novaFigura.setX3(perm[0].getX3());  //dados da primeiroa figura                
+
+        resultante = perm[0].getClone();
+
+        for (int i = 1; i < perm.length; i++)
+            resultante = juntar(resultante.getClone(), perm[i].getClone()); //anterior com a proxima
+
+        novaFigura.setX1(resultante.getX1()); //dados do ultimo trapezoide
+        novaFigura.setX2(resultante.getX2()); //dados do ultimo trapezoide
+
+        coordenada_final.add(novaFigura.getClone());
+    }//--juntarFigurasNovaPermutacao
+    
+  
+    /**
+        metodo que imprime todas permutacoes 
+    */
     private static void imprimePermutacoes() {
         int aux = 0;
 		System.out.println();
@@ -143,37 +184,25 @@ public class Principal{
 	} //--imprimePermutacoes
 
 
+    /**
+        metodo que calcula a area de todas as figuras
+    */
     private static void calcAreaTotalFiguras(){
-        float aux = (float)0.0;
+        areaTotalFiguras = (float)0.0;        
+        //pegando qualquer permutação para calcular areas das figuras
+        Figura[] f = permutacoes.get(0); 
 
-        //for (Figura[] f : permutacoes){                        
-            
-            //aux = (float)0.0;
-            //pegando qualquer permutação para calcular areas das figuras
-            Figura[] f = permutacoes.get(0); 
-
-            for (int i=0; i < f.length; i++) {
-                f[i].calcAreaFigura();
-                aux += f[i].getArea();                
-            }
-            
-            //System.out.println("\narea = " + aux);
-            System.out.println("\narea total das figuras= " + aux);
-
-            //if (aux > melhorArea)
-            //    melhorArea = aux;
-
-            //areasTotais.add((float)aux);
-        //}//end for
-        //System.out.println("\n\nMelhor área = " + melhorArea);
+        for (int i=0; i < f.length; i++) {
+            f[i].calcAreaFigura();
+            areaTotalFiguras += f[i].getArea();                
+        }           
     }//--calcAreas
 
 
 
-
-
-
-    /** imprime a permutacao corrente */
+    /** 
+        metodo que as figuras
+    */
 	private static void imprimeFiguras() {
 		
 		System.out.println(); cont++;
@@ -187,8 +216,76 @@ public class Principal{
 	} //--imprime
 
 
+    /**
+        metodo que calcula a area total do pano em cada permutacao
+    */
+    private static void calcAreaPano(){
+        Float areaTotal = (float)0.0;        
+        Float base_a = (float)0.0;
+        Float base_b = (float)0.0;
+        
+        //percorrer arraylista q contem uma coordenada final de cada permutacao
+        for (Figura f : coordenada_final){
+            areaTotal = (float)0.0; 
+            base_a = calcDistancia(f.getX0(), f.getX1());
+            base_b = calcDistancia(f.getX3(), f.getX2());
 
-   
+            if (base_a > base_b){
+                areaTotal = base_a * 100;
+                areaTotalPano.add(areaTotal);
+            }
+            else{
+                areaTotal = base_b * 100;
+                areaTotalPano.add(areaTotal);
+            }            
+        }//end for                            
+        
+    }//--calcAreaPano
+
+
+    /**
+        a => x0 ou x3
+        b => x1 ou x2
+    */
+    private static float calcDistancia(float a, float b){        
+        float resp = (float)0.0;
+
+        if ((a < 0) && (b < 0))
+            resp = (a * (-1)) - (b * (-1));
+        else if ((a < 0) && (b >= 0))
+            resp = (a * (-1)) + b;
+        else if((a >= 0) && (b >= 0))        
+            resp = b - a;
+
+        return resp;
+    }//--calcDistancia
+
+
+    /**
+        metodo que calcula a area de desperdício de cada permutacação
+    */
+    private static void calcDesperdicio(){
+        float aux;
+
+        //percorrer a area total do pano de cada permutacao
+        for (Float a : areaTotalPano){
+            aux = a - areaTotalFiguras;
+            areaTotalDesperdicio.add(aux);
+        }
+    }//--calcDesperdicio
+
+
+
+    private static void controle(){
+        //imprimeFiguras();        
+        fazerPermuta();
+        //imprimePermutacoes();
+        calcAreaTotalFiguras();
+        //System.out.println("area total figuras = " + areaTotalFiguras);
+        //testeJuntarFigura();
+        calcAreaPano();
+        calcDesperdicio();
+    }//end controle
 
 
 
@@ -210,17 +307,11 @@ public class Principal{
                 Float.valueOf(coordenadas[2]).floatValue(),
                 id
             );   
-            id++;
-
-            //System.out.println("==> " + figuras[i].getArea());
+            id++;                    
 
         }//end for
         
-        //imprimeFiguras();
-
-        //testeJuntarFigura();
-        testePermuta();
-        calcAreaTotalFiguras();
+        controle();
 
         System.out.println();
     }//end main
