@@ -19,7 +19,8 @@ public class Principal{
     private static ArrayList<Figura> coordenada_final = new ArrayList<Figura>();    
     private static float areaTotalFiguras = (float)0.0;
     private static ArrayList<Float> areaTotalPano = new ArrayList<Float>();    
-    private static ArrayList<Float> areaTotalDesperdicio = new ArrayList<Float>();    
+    private static ArrayList<Float> areaTotalDesperdicio = new ArrayList<Float>(); 
+    private static float menorDesperdicio = (float)0.0;   
 
 
     /**
@@ -266,13 +267,21 @@ public class Principal{
     */
     private static void calcDesperdicio(){
         float aux;
+        menorDesperdicio = 0.0;
 
         //percorrer a area total do pano de cada permutacao
         for (Float a : areaTotalPano){
             aux = a - areaTotalFiguras;
             areaTotalDesperdicio.add(aux);
+
+            //menor desperdicio
+            if (a < menorDesperdicio)
+                menorDesperdicio = a;
         }
     }//--calcDesperdicio
+
+
+    private static void melhorCombinacao(){}//--melhorCombinacao
 
 
 
