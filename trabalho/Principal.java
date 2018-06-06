@@ -267,17 +267,22 @@ public class Principal{
     */
     private static void calcDesperdicio(){
         float aux;
-        menorDesperdicio = (float)0.0;
+        menorDesperdicio = areaTotalFiguras;
 
         //percorrer a area total do pano de cada permutacao
         for (Float a : areaTotalPano){
             aux = a - areaTotalFiguras;
             areaTotalDesperdicio.add(aux);
-
+            
             //menor desperdicio
-            if (a < menorDesperdicio)
-                menorDesperdicio = a;
+            if (aux < menorDesperdicio)
+                menorDesperdicio = aux;
         }
+
+        System.out.println("\n\n menor = " + menorDesperdicio);
+        //for (Float b : areaTotalDesperdicio)
+          //  System.out.println("desperdicio: " + b);
+        //System.out.println("\n\n");
     }//--calcDesperdicio
 
 
@@ -298,7 +303,7 @@ public class Principal{
 
         //exibir
         Figura []fig = permutacoes.get(pos);
-        System.out.println("\n\n\n\nMELHOR COMBINAÇÃO:\n");
+        System.out.println("\n\n\nMELHOR COMBINAÇÃO:\n");
         for (Figura f : fig)
             System.out.print(f.getId() + " ");
         System.out.println("\n\n");
@@ -307,14 +312,19 @@ public class Principal{
 
 
     private static void controle(){
-        //imprimeFiguras();        
+        //imprimeFiguras(); 
+        System.out.println("\nFazendo permutacoes...");       
         fazerPermuta();
         //imprimePermutacoes();
+        System.out.println("\ncalculando area total das figuras...");       
         calcAreaTotalFiguras();
         //System.out.println("area total figuras = " + areaTotalFiguras);
         //testeJuntarFigura();
+        System.out.println("\ncalculando area do pano...");       
         calcAreaPano();
+        System.out.println("\ncalculando desperdicio...");       
         calcDesperdicio();
+        System.out.println("\ncalculando melhor combinação...");       
         calcMelhorCombinacao();
     }//end controle
 
